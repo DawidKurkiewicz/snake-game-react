@@ -35,7 +35,7 @@ class Snake extends React.Component {
             ],
 
             meals: [],
-            currentPlayerIndex:0,
+            currentPlayerIndex: 0,
             gameTickTime: props.startGameTickTime
         }
     }
@@ -61,9 +61,31 @@ class Snake extends React.Component {
             let newSnakeHeadPosition = null
             switch (direction) {
                 case 'left':
+                    newSnakeHeadPosition = {
+                        x: snakeHeadPosition.x - 1,
+                        y: snakeHeadPosition.y
+                    }
+                    break
                 case 'right':
+                    newSnakeHeadPosition = {
+                        x: snakeHeadPosition.x + 1,
+                        y: snakeHeadPosition.y
+                    }
+                    break
                 case 'top':
+                    newSnakeHeadPosition = {
+                        x: snakeHeadPosition.x,
+                        y: snakeHeadPosition.y -1
+                    }
+                    break
                 case 'bottom':
+                    newSnakeHeadPosition = {
+                        x: snakeHeadPosition.x,
+                        y: snakeHeadPosition.y + 1
+                    }
+                    break
+                    default:
+
 
             }
         })
