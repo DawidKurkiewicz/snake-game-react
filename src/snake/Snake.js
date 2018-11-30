@@ -71,8 +71,9 @@ class Snake extends React.Component {
     }
 
     componentDidMount() {
-        this.placeNewMeal()
+        
         this.checkIfIsInTheMatch()
+        this.placeNewMeal()
         this.intervalId = setInterval(
             this.gameTick,
             this.state.gameTickTime
@@ -97,11 +98,11 @@ class Snake extends React.Component {
         this.checkIfMovesAreAvailable()
     }
     placeNewMeal = () => {
-        this.setState({
-            meals: this.state.meals.concat(
+        this.props.firebaseDatabase.ref(`snake-multi/${this.matchId}/meals`).set(
+            this.state.meals.concat(
                 this.generateNewMealPosition()
             )
-        })
+        )
     }
 
     generateNewMealPosition = () => {
@@ -167,10 +168,9 @@ class Snake extends React.Component {
 
         } else {
             this.moveSnakeOnMeal(newSnakeHeadPosition)
-            this.setState({
-
-                meals: newMeals
-            })
+            this.props.firebaseDatabase.ref(`snake-multi/${this.matchId}/meals`).set(
+                newMeals
+            )
             this.placeNewMeal()
         }
     }
@@ -185,9 +185,9 @@ class Snake extends React.Component {
                 snake
         ))
 
-        this.setState({
-            snakes: newSnakes
-        })
+        this.props.firebaseDatabase.ref(`snake-multi/${this.matchId}/snakes`).set(
+            newSnakes
+        )
     }
 
     moveSnake = (newSnakeHeadPosition) => {
@@ -201,9 +201,9 @@ class Snake extends React.Component {
                 snake
         ))
 
-        this.setState({
-            snakes: newSnakes
-        })
+        this.props.firebaseDatabase.ref(`snake-multi/${this.matchId}/snakes`).set(
+            newSnakes
+        )
     }
 
     endGame = () => {
