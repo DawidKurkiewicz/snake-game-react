@@ -12,6 +12,7 @@ class Snake extends React.Component {
         this.currentGameBoard = null
         this.direction = 'right'
         this.currentPlayerIndex = 0
+        this.matchId = null
 
 
         this.state = {
@@ -39,7 +40,23 @@ class Snake extends React.Component {
             gameTickTime: props.startGameTickTime
         }
     }
+
+
+
+    checkIfIsInTheMatch = () => {
+        if (window.location.hash) {
+            this.matchId = window.location.hash
+        } else {
+            this.startNewMatch()
+        }
+    }
+
+    startNewMatch = () => {
+        const newRef = this.props.firebaseDatabase.ref('snake-multi').push()
+        this.matchOd = newRef.key
+    }
     componentDidMount() {
+        this.checkIfIsInTheMatch()
         this.intervalId = setInterval(
             this.gameTick,
             this.state.gameTickTime
@@ -138,6 +155,7 @@ class Snake extends React.Component {
 
                 meals: newMeals
             })
+            this.placeNewMeal()
         }
     }
     moveSnakeOnMeal = (newSnakeHeadPosition) => {
@@ -174,6 +192,8 @@ class Snake extends React.Component {
 
     endGame = () => {
         alert(`Lost!`)
+        clearInterval(this.intervalId)
+
     }
 
 
@@ -224,7 +244,7 @@ class Snake extends React.Component {
 }
 
 Snake.defaultProps = {
-    boardDimension: 11,
-    startGameTickTime: 1000
+    boardDimension: 30,
+    startGameTickTime: 100
 }
 export default Snake
