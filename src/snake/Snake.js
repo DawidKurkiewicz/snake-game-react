@@ -3,20 +3,57 @@ import GameBoard from './GameBoard';
 
 
 class Snake extends React.Component {
-    state = {
-        gameBoard: (
-            Array(this.props.boardDimension)
-                .fill(
-                    Array(this.props.boardDimension)
-                        .fill(1)
-                )
-        )
-    }
-    render() {
-        const gameBoard = JSON.parse(JSON.stringify(this.state.gameBoard))
-        gameBoard[0][0] = 0
-        gameBoard[2][3] = 'F'
+    constructor(props) {
+        super()
 
+        const halfBoardDimension = Math.ceil(props.boardDimension / 2) - 1
+
+
+        this.state = {
+            gameBoard: (
+                Array(props.boardDimension)
+                    .fill(
+                        Array(props.boardDimension)
+                            .fill(1)
+                    )
+            ),
+            snakes: [
+                [
+                    { x: halfBoardDimension + 2, y: halfBoardDimension },
+                    { x: halfBoardDimension + 1, y: halfBoardDimension }
+
+                ],
+                [
+                    { x: halfBoardDimension - 2, y: halfBoardDimension },
+                    { x: halfBoardDimension - 1, y: halfBoardDimension }
+
+                ]
+            ], directions: [
+                'right',
+                'left'
+            ],
+
+            meals: []
+        }
+    }
+    composeGameBoard = () => {
+        const gameBoardCopy = JSON.parse(JSON.stringify(this.state.gameBoard))
+
+        this.state.snakes
+            .forEach(snake => (
+                snake.forEach(bodyCellPosition => (
+                    gameBoardCopy[bodyCellPosition.y][bodyCellPosition.x] = 0
+                ))
+            ))
+
+        this.state.meals.forEach(mealPosition => (
+            gameBoardCopy[mealPosition.y][mealPosition.x] = 'F'
+        ))
+        return gameBoardCopy
+    }
+
+    render() {
+        const gameBoard = this.composeGameBoard()
         return (
             <div>
                 <GameBoard
@@ -28,6 +65,6 @@ class Snake extends React.Component {
 }
 
 Snake.defaultProps = {
-    boardDimension: 10
+    boardDimension: 11
 }
 export default Snake
