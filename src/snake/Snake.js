@@ -14,6 +14,8 @@ class Snake extends React.Component {
     }
     render() {
         const gameBoard = JSON.parse(JSON.stringify(this.state.gameBoard))
+        gameBoard[0][0] = 0
+        gameBoard[2][3] = 'F'
 
         return (
             <div>

@@ -5,18 +5,20 @@ import GameRow from './GameRow'
 const style = {
   width: '100%',
   maxWidth: '700px',
-  margin:'0 auto',
-  backgroundColor: 'red'
+  height: '100vw',
+  maxHeight: '700px',
+  margin: '0 auto',
+  border: '1px solid black'
 }
 
 const GameBoard = (props) => (
   <div
-  style={style}
+    style={style}
   >
     {
       props.gameBoard.map(row => (
-       <GameRow
-       row={row} />
+        <GameRow
+          row={row} />
       ))
     }
   </div>
