@@ -46,14 +46,21 @@ class Snake extends React.Component {
     checkIfIsInTheMatch = () => {
         if (window.location.hash) {
             this.matchId = window.location.hash
+            this.currentPlayerIndex = 1
+            this.direction = 'left'
         } else {
             this.startNewMatch()
         }
     }
 
     startNewMatch = () => {
-        const newRef = this.props.firebaseDatabase.ref('snake-multi').push()
+        const newRef = this.props.firebaseDatabase.ref('snake-multi').push(
+            this.state
+        )
+        window.location.hash = newRef.key
         this.matchOd = newRef.key
+        this.currentPlayerIndex = 0
+        this.direction = 'right'
     }
     componentDidMount() {
         this.checkIfIsInTheMatch()
@@ -244,7 +251,7 @@ class Snake extends React.Component {
 }
 
 Snake.defaultProps = {
-    boardDimension: 30,
-    startGameTickTime: 100
+    boardDimension: 11,
+    startGameTickTime: 500
 }
 export default Snake
