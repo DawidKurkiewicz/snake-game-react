@@ -45,7 +45,7 @@ class Snake extends React.Component {
 
     checkIfIsInTheMatch = () => {
         if (window.location.hash) {
-            this.matchId = window.location.hash
+            this.matchId = window.location.hash.replace('#', '')
             this.currentPlayerIndex = 1
             this.direction = 'left'
         } else {
@@ -62,7 +62,16 @@ class Snake extends React.Component {
         this.currentPlayerIndex = 0
         this.direction = 'right'
     }
+
+    startListeningDatabaseChanges = () => {
+        this.props.firebaseDatabase.ref(`snake-multi/${this.matchId}`).on(
+            'value',
+            snapshot => this.setState(snapshot.val())
+        )
+    }
+
     componentDidMount() {
+        this.placeNewMeal()
         this.checkIfIsInTheMatch()
         this.intervalId = setInterval(
             this.gameTick,
@@ -73,7 +82,7 @@ class Snake extends React.Component {
             'keydown',
             this.onArrowKeyDown
         )
-        this.placeNewMeal()
+        this.startListeningDatabaseChanges()
 
     }
     componentWillUnmount() {
@@ -82,7 +91,7 @@ class Snake extends React.Component {
             'keydown',
             this.onArrowKeyDown
         )
-
+        this.props.firebaseDatabase.ref(`snake-multi/${this.matchId}`).off()
     }
     gameTick = () => {
         this.checkIfMovesAreAvailable()
@@ -96,8 +105,8 @@ class Snake extends React.Component {
     }
 
     generateNewMealPosition = () => {
-        const randomX = Math.round(Math.random() * (this.props.boardDimension) - 1)
-        const randomY = Math.round(Math.random() * (this.props.boardDimension) - 1)
+        const randomX = Math.round(Math.random() * (this.props.boardDimension - 1))
+        const randomY = Math.round(Math.random() * (this.props.boardDimension - 1))
         return {
             x: randomX,
             y: randomY
