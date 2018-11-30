@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import Snake from './snake/snake'
 
 class App extends Component {
   render() {
     return (
       <div>
-        hello
+        <Snake />
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
